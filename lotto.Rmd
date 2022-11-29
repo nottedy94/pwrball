@@ -1,0 +1,142 @@
+---
+title: "Powerball Randomizer"
+author: "J. Ted Hillert"
+date: "`r Sys.Date()`"
+output:
+  bookdown::html_document2:
+    number_sections: false
+    toc: no
+#    always_allow_html: true
+
+bibliography:
+- aRticles.bib
+
+csl: ecology.csl
+---
+
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(message=FALSE,
+                      echo=FALSE,
+                      warning=FALSE)
+
+library(kableExtra)
+library(papaja)
+library(tidyverse)
+
+
+papaja::r_refs(file = "paper2.bib")
+
+options(knitr.kable.NA = "")
+
+
+```
+
+
+```{r import, include=FALSE}
+
+lottery<-read.csv("lottery.csv")
+
+ff<-lottery[1:6990,]
+ff
+
+pow<-lottery[6991:8388,]
+pow
+
+```
+
+```{r columnrando, include=FALSE}
+
+#Top five per ball
+
+topff<-sort(table(ff[,2]),decreasing=TRUE)[1:5]
+topff
+
+toppow<-sort(table(pow[,2]),decreasing=TRUE)[1:3]
+toppow
+
+
+```
+
+```{r topfftab, include=FALSE}
+
+fftab<-kbl(
+  topff,
+  col.names = c(
+    "Number",
+    "Frequency"
+  ),
+  caption = "Top five numbers from previous drawings"
+  )|>
+  kable_styling(full_width=20)|>
+  kable_classic(
+    full=FALSE
+  )
+
+fftab
+
+```
+
+```{r toppowtab, include=FALSE}
+powtab<-kbl(
+  toppow,  
+  col.names = c(
+    "Number",
+    "Frequency"
+  ),
+  caption = "Top three powerball numbers from previous drawings"
+  )|>
+  kable_styling(full_width=10)|>
+  kable_classic(
+    full=FALSE
+  )
+
+powtab
+
+```
+
+```{r prevpicker, include=FALSE}
+
+#random five previous
+
+ffsamp<-ff[sample(nrow(ff),5),]
+powsamp<-pow[sample(nrow(pow),1),]
+sample<-rbind(ffsamp,powsamp)
+sample
+
+
+```
+
+```{r prevtab, echo=FALSE}
+prev<-sample%>%
+  group_by(Ball
+    )
+
+prevtab<-kbl(
+  prev,
+  caption = "Most common numbers from previous drawings"
+  )%>%
+  kable_classic(
+    full=FALSE
+  )
+
+prevtab
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
